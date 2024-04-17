@@ -1,0 +1,16 @@
+<form class="user-form" [formGroup]="itemForm" action="" (submit)="addItem()">
+  <input
+    *ngIf="locationOfForm === 'comments'"
+    class="user-input-color"
+    type="color"
+    placeholder="Enter username"
+    formControlName="color"
+  />
+  <input
+    formControlName="name"
+    class="user-input"
+    type="text"
+    placeholder="Enter username"
+  />
+  <button class="add-button">Add</button>
+</form>

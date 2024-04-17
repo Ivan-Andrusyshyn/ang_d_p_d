@@ -1,1 +1,13 @@
-<app-work-with-signals></app-work-with-signals>
+<div class="main__container">
+  <div class="app__sidebar"></div>
+  <div class="todo__container">
+    <div class="todo__wrapper">
+      <app-addform locationOfForm="items"></app-addform>
+      <app-list-item locationOfForm="items"></app-list-item>
+    </div>
+    <div class="todo__wrapper">
+      <app-list-item locationOfForm="comments"></app-list-item>
+      <app-addform locationOfForm="comments"></app-addform>
+    </div>
+  </div>
+</div>

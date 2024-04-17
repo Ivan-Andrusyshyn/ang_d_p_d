@@ -1,0 +1,46 @@
+.list__wrapper {
+  list-style-type: none;
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 4px;
+}
+.list-item p {
+  margin: 0;
+  cursor: pointer;
+}
+.comment-item {
+  padding: 4px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background-color: #f0f0f0;
+}
+
+.comment-item p {
+  margin: 0;
+}
+
+.item__delete_btn {
+  cursor: pointer;
+  color: red;
+}
+
+.color__container {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+}
+
+.active {
+  content: "";
+  border-left: 3px solid red;
+}
