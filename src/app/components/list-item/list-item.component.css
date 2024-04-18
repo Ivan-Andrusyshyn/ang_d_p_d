@@ -1,6 +1,7 @@
 .list__wrapper {
   list-style-type: none;
   padding: 0;
+  height: 120px;
 }
 
 .list-item {

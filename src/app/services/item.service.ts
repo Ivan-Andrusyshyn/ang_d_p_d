@@ -10,11 +10,11 @@ export class ItemService {
   private items: ItemInterface[] = [];
   items$ = new BehaviorSubject<ItemInterface[]>(this.items);
 
-  selectedItem = new BehaviorSubject<number>(0);
+  selectedItem = new BehaviorSubject<ItemInterface>(this.items[0]);
   constructor() {}
 
-  selectItem(id: number) {
-    this.selectedItem.next(id);
+  selectItem(indexItem: number) {
+    this.selectedItem.next(this.items[indexItem]);
   }
 
   deleteItem(id: number): void {
@@ -24,20 +24,14 @@ export class ItemService {
     this.items = [...items];
   }
 
-  addItem(name: string): void {
-    const newItem: ItemInterface = {
-      id: this.items.length,
-      name: name,
-      comments: [],
-    };
-
+  addItem(newItem: ItemInterface): void {
     this.items.push(newItem);
     this.items$.next([...this.items]);
   }
 
   addComment(comment: CommentInterface): void {
     const itemIndex = this.items.findIndex(
-      (item) => item.id === this.selectedItem.value
+      (item) => item.id === this.selectedItem.value.id
     );
     if (itemIndex !== -1) {
       this.items[itemIndex].comments.push(comment);

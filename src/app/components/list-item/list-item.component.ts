@@ -18,21 +18,22 @@ export class ListItemComponent implements OnInit {
 
   items: ItemInterface[] = [];
 
-  selectedItem: ItemInterface = this.items[0];
+  selectedItem: ItemInterface | null = null;
   comments: CommentInterface[] = [];
 
   ngOnInit(): void {
     this.itemService.items$.subscribe((itemList) => {
       this.items = itemList;
-      if (this.items.length > 0) {
-        this.selectedItem = this.items[0];
-        this.comments = this.selectedItem.comments;
-      }
     });
-    this.itemService.selectedItem.subscribe((selectedItemIndex) => {
-      if (selectedItemIndex < this.items.length) {
-        this.selectedItem = this.items[selectedItemIndex];
-        this.comments = this.selectedItem.comments;
+
+    this.selectedItem = this.items[0];
+
+    this.itemService.selectedItem.subscribe((selectedItem) => {
+      if (selectedItem) {
+        console.log(selectedItem.comments);
+
+        this.selectedItem = selectedItem;
+        this.comments = selectedItem.comments;
       }
     });
   }

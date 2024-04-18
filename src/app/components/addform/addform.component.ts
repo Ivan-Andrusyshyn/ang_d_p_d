@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommentInterface } from '../../model/commentInterface';
+import { ItemInterface } from '../../model/itemInterface';
 
 @Component({
   selector: 'app-addform',
@@ -28,21 +29,41 @@ export class AddformComponent {
   });
 
   addItem() {
-    const itemName = this.itemForm.get('name')?.value;
-    const commentColor = this.itemForm.get('color')?.value;
     if (this.isAddingItem()) {
-      this.itemService.addItem(itemName);
-    } else {
-      const newItem: CommentInterface = {
-        id: this.itemService.items$.value.length,
-        name: itemName,
-        color: commentColor || '#040404',
-      };
-      this.itemService.addComment(newItem);
+      this.addItemToList();
+    }
+    if (this.isAddingComment()) {
+      this.addCommentToSelectedItem();
     }
     this.itemForm.reset();
   }
 
+  private addItemToList() {
+    const itemName = this.itemForm.get('name')?.value;
+    const newItem: ItemInterface = {
+      id: this.itemService.items$.value.length + 1,
+      name: itemName,
+      comments: [],
+    };
+    this.itemService.addItem(newItem);
+    this.itemService.selectItem(0);
+  }
+
+  private addCommentToSelectedItem() {
+    const itemName = this.itemForm.get('name')?.value;
+    const commentColor = this.itemForm.get('color')?.value || '#040404';
+    const commentLength = this.itemService.selectedItem.value.comments.length;
+    const newComment: CommentInterface = {
+      id: commentLength + 1,
+      name: itemName,
+      color: commentColor,
+    };
+    this.itemService.addComment(newComment);
+  }
+
+  private isAddingComment(): boolean {
+    return this.locationOfForm === 'comments' && this.itemForm.valid;
+  }
   private isAddingItem(): boolean {
     return this.locationOfForm === 'items' && this.itemForm.valid;
   }
