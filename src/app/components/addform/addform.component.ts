@@ -31,8 +31,7 @@ export class AddformComponent {
   addItem() {
     if (this.isAddingItem()) {
       this.addItemToList();
-    }
-    if (this.isAddingComment()) {
+    } else {
       this.addCommentToSelectedItem();
     }
     this.itemForm.reset();
@@ -40,30 +39,37 @@ export class AddformComponent {
 
   private addItemToList() {
     const itemName = this.itemForm.get('name')?.value;
+
     const newItem: ItemInterface = {
       id: this.itemService.items$.value.length + 1,
       name: itemName,
       comments: [],
     };
     this.itemService.addItem(newItem);
-    this.itemService.selectItem(0);
+
+    const firstItem = this.itemService.items$.value.length === 1;
+
+    if (firstItem) {
+      this.itemService.selectItem(0);
+    }
   }
 
   private addCommentToSelectedItem() {
     const itemName = this.itemForm.get('name')?.value;
     const commentColor = this.itemForm.get('color')?.value || '#040404';
-    const commentLength = this.itemService.selectedItem.value.comments.length;
-    const newComment: CommentInterface = {
-      id: commentLength + 1,
-      name: itemName,
-      color: commentColor,
-    };
-    this.itemService.addComment(newComment);
+    const item = this.itemService.selectedItem$.value;
+
+    if (item && itemName) {
+      const commentLength: number = item.comments.length;
+      const newComment: CommentInterface = {
+        id: commentLength + 1,
+        name: itemName,
+        color: commentColor,
+      };
+      this.itemService.addComment(newComment);
+    }
   }
 
-  private isAddingComment(): boolean {
-    return this.locationOfForm === 'comments' && this.itemForm.valid;
-  }
   private isAddingItem(): boolean {
     return this.locationOfForm === 'items' && this.itemForm.valid;
   }

@@ -3,23 +3,34 @@
 }
 
 .app__sidebar {
-  width: 200px;
-  background-color: lightblue;
-  height: 100vh;
+  max-width: 300px;
+  padding: 10px;
+  min-height: 100vh;
+  line-height: 1.6em;
+
+  text-align: center;
+  color: #5b5d63;
+  background-color: #2b2f3e;
 }
 
 .todo__container {
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
   gap: 2rem;
   padding: 2rem;
+
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .todo__wrapper {
-  width: 300px;
-  max-width: 400px;
-  height: 200px;
-  padding: 1rem;
-  border: 2px solid green;
-  border-radius: 1rem;
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
 }

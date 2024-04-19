@@ -1,8 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { ItemService } from '../../services/item.service';
 import { ItemInterface } from '../../model/itemInterface';
 import { NgFor, NgIf } from '@angular/common';
-import { CommentInterface } from '../../model/commentInterface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-list-item',
@@ -11,38 +11,31 @@ import { CommentInterface } from '../../model/commentInterface';
   templateUrl: './list-item.component.html',
   styleUrl: './list-item.component.css',
 })
-export class ListItemComponent implements OnInit {
+export class ListItemComponent {
   itemService = inject(ItemService);
 
-  @Input() locationOfForm = '';
+  @Input() locationOfForm = 'item';
 
-  items: ItemInterface[] = [];
+  items: ItemInterface[] | any = [];
 
   selectedItem: ItemInterface | null = null;
-  comments: CommentInterface[] = [];
 
-  ngOnInit(): void {
-    this.itemService.items$.subscribe((itemList) => {
+  constructor() {
+    this.itemService.items$.pipe(takeUntilDestroyed()).subscribe((itemList) => {
       this.items = itemList;
     });
-
-    this.selectedItem = this.items[0];
-
-    this.itemService.selectedItem.subscribe((selectedItem) => {
-      if (selectedItem) {
-        console.log(selectedItem.comments);
-
+    this.itemService.selectedItem$
+      .pipe(takeUntilDestroyed())
+      .subscribe((selectedItem) => {
         this.selectedItem = selectedItem;
-        this.comments = selectedItem.comments;
-      }
-    });
+      });
   }
+
   deleteItem(itemId: number): void {
     this.itemService.deleteItem(itemId);
   }
 
   selectItem(i: number): void {
     this.itemService.selectItem(i);
-    console.log(this.comments);
   }
 }

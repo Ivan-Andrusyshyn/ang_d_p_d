@@ -1,22 +1,22 @@
-<ul class="list__wrapper">
-  <ng-container *ngIf="locationOfForm === 'items'">
+<ul class="item-list">
+  <ng-container *ngIf="locationOfForm === 'items'; else commentsTemplate">
     <li
       *ngFor="let item of items; let i = index"
       (click)="selectItem(i)"
-      class="list-item"
-      [class.active]="item === selectedItem"
+      class="item"
+      [class.active]="item.id === selectedItem?.id"
     >
       <p>{{ item.name }}</p>
       <span (click)="deleteItem(item.id)" class="item__delete_btn">X</span>
     </li>
   </ng-container>
-  <ng-container *ngIf="locationOfForm === 'comments'">
-    <li *ngFor="let comment of comments" class="comment-item">
+  <ng-template #commentsTemplate>
+    <li *ngFor="let comment of selectedItem?.comments" class="comment-item">
       <div
         [style.background-color]="comment.color"
         class="color__container"
       ></div>
       <p>{{ comment.name }}</p>
     </li>
-  </ng-container>
+  </ng-template>
 </ul>
