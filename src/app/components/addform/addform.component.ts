@@ -24,11 +24,16 @@ export class AddformComponent {
   private fb = inject(FormBuilder);
 
   itemForm: FormGroup = this.fb.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(2)]],
     color: [''],
   });
 
   addItem() {
+    if (this.itemForm.invalid) {
+      this.itemForm.setErrors({ incorrectType: true });
+      return;
+    }
+
     if (this.isAddingItem()) {
       this.addItemToList();
     } else {
@@ -38,10 +43,14 @@ export class AddformComponent {
   }
 
   private addItemToList() {
-    const itemName = this.itemForm.get('name')?.value;
+    const itemName = this.itemForm.get('name')?.value.trim();
+    if (!itemName) return;
+
+    const itemId =
+      this.itemService.items$.value.length + Math.random().toFixed(5);
 
     const newItem: ItemInterface = {
-      id: this.itemService.items$.value.length + 1,
+      id: Number(itemId),
       name: itemName,
       comments: [],
     };
@@ -55,19 +64,21 @@ export class AddformComponent {
   }
 
   private addCommentToSelectedItem() {
-    const itemName = this.itemForm.get('name')?.value;
-    const commentColor = this.itemForm.get('color')?.value || '#040404';
-    const item = this.itemService.selectedItem$.value;
+    const itemName = this.itemForm.get('name')?.value.trim();
+    if (!itemName) return;
 
-    if (item && itemName) {
-      const commentLength: number = item.comments.length;
-      const newComment: CommentInterface = {
-        id: commentLength + 1,
-        name: itemName,
-        color: commentColor,
-      };
-      this.itemService.addComment(newComment);
-    }
+    const commentColor = this.itemForm.get('color')?.value || '#040404';
+    const itemId = Number(
+      this.itemService.selectedItem$.value?.comments.length +
+        Math.random().toFixed(4)
+    );
+
+    const newComment: CommentInterface = {
+      id: itemId + 1,
+      name: itemName,
+      color: commentColor,
+    };
+    this.itemService.addComment(newComment);
   }
 
   private isAddingItem(): boolean {

@@ -14,5 +14,23 @@
     placeholder="Enter username"
     title="Please enter name"
   />
-  <button class="add-button">Add</button>
+  <button
+    [class.comments-add-button]="locationOfForm === 'comments'"
+    [class.add-button]="locationOfForm === 'items'"
+  >
+    Add
+  </button>
+
+  <p
+    class="error-message"
+    *ngIf="
+      itemForm.get('name')?.invalid &&
+      (itemForm.get('name')?.dirty || itemForm.get('name')?.touched) &&
+    !itemForm.errors?.['incorrectType']"
+  >
+    Name is required and must be at least 2 characters long!
+  </p>
+  <div *ngIf="itemForm.errors?.['incorrectType']" class="error-message">
+    Invalid operation: cannot add a comment to an item.
+  </div>
 </form>
